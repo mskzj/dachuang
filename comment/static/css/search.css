@@ -1,0 +1,19 @@
+span.highlighted {
+    color: red;
+    font-size: x-large;
+}
+
+.list_show {
+    height: auto;
+    width: 100%;
+    min-height: 100px;
+    border: 4px outset cadetblue;
+    text-align: center;
+    margin: 5px;
+    border-radius: 10px;
+    display: inline-block;
+    overflow: hidden;
+}
+.list_show:hover{
+background-color: gainsboro;
+}

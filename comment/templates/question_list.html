@@ -1,0 +1,117 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block title %}<title>{{ question_type }}</title>{% endblock %}
+	{% block extracss %} 
+	<link href="{% static 'css/question_list.css' %}" type="text/css" rel="stylesheet" /> 
+	{% endblock %}
+
+
+
+
+
+{% block content %}
+    
+    	<ul>
+    {% for question in questions_of_page %}
+    <li class="list_show" >
+        
+        <div class="user_info">
+        {% for userinfo in question.user.userinfo.all %}
+        <a href="{% url 'show_other_user' %}?other_user_name={{ userinfo.nickname }}">
+        	<img src="{{ userinfo.headimg.url }}" height="50px" width="50px" ></a>
+        <p>{{ userinfo.nickname }}</p>
+      
+        {% endfor %}
+        </div>
+      
+        {% autoescape off %}
+        
+        <div class="context" onclick="window.open('{% url 'comment' %}?question_id={{ question.pk }}')">
+                
+                 <h3>{{ question.question_text }}</h3>
+		         <img  src="/media/{{ question.question_img }}" alt="" >
+		       {% endautoescape %}
+		</div>
+       
+                 <h4 style="	font-size: 12px;	float: right;">悬赏{{ question.reward_integral }}积分
+                  <br>{{ question.question_date }}</h4>
+        
+    </li>
+   
+     {% endfor %}
+   </ul>
+
+   
+   
+   
+   
+   <div class="pagination">
+   	
+        <span class="step-links">
+        	
+        
+           {% if questions_of_page.has_previous %}
+            <a href="?page=1">&laquo; 首页</a>
+            <a href="?page={{ questions_of_page.previous_page_number }}">上一页</a>
+            {% endif %}
+        
+            
+            
+        <span class="current">
+            第 {{ questions_of_page.number }} 页
+                     共 {{ questions_of_page.paginator.num_pages }} 页
+        </span>
+        
+        <span class="page_list">
+            {% if not first_shown_page_num == 1 %}
+            <a href="?page=1">1</a>
+            <a>......<a>
+            {% endif %}
+            {% for page in page_range %}
+            <a href="?page={{ page }}">{{ page }}</a>
+            {% endfor %}
+            {% if not last_shown_page_num == questions_of_page.paginator.num_pages %}
+            <a>......<a>
+            <a href="?page={{ question_of_page.paginator.num_pages }}">{{ questions_of_page.paginator.num_pages }}</a>
+            {% endif %}
+        </span>
+        
+  
+        {% if questions_of_page.has_next %}
+            <a href="?page={{ questions_of_page.next_page_number }}">下一页</a>
+            <a href="?page={{ questions_of_page.paginator.num_pages }}">尾页 &raquo;</a>
+        {% endif %}
+        </span>
+        
+        
+        
+    </div>
+
+   <div class="question_post">
+      <form action="{% url 'post_question' '{{ question_type }}' %}" enctype="multipart/form-data" method="post" id="post_question_form">
+      {% csrf_token %}
+        {% for field in question_form %}
+        <label for="{{ field.id_for_lable }}">{{ field.label }}</label>
+        {{ field }}
+        <p>{{ field.errors.as_text }}</p>
+        {% endfor %}
+        <input type="hidden" value="{{ question_type }}" name="question_type">
+        <input type="range" max={{ max_integral }} min="0" name="reward_integral" id="reward_integral" oninput="change()">
+        <label for="reward_integral">悬赏积分</label>
+        <a id="reward_num">0</a>
+        <input type="submit" value="提问">
+    </form>
+   </div>
+    
+    
+    
+{% endblock %}
+
+{% block javascript %}
+    function change(){
+        var x=$('#reward_integral').val();
+        $('#reward_num').text(x);
+    }
+{% endblock %}

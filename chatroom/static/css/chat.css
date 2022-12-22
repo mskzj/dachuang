@@ -1,0 +1,107 @@
+ul{
+	padding-left: 0px;
+	list-style: none;
+}
+
+.context,.context h5,.user_info img,.user_info{
+	float: left;
+}
+.list_show{
+	height: auto;
+	width: 100%;
+	min-height: 100px;
+	border: 4px outset cadetblue;
+	text-align: center;
+	margin: 5px;
+	border-radius: 10px;
+	padding: 5px;
+	display: inline-block;
+	overflow: hidden;
+}
+
+.list_show:hover{
+	background-color: gainsboro;
+}
+
+
+
+
+
+
+.user_info{
+	text-align: center;
+	margin: 0px auto;
+	height:100px;
+	width: 80px;
+	
+}
+.user_info h5{
+	color: mediumvioletred;
+	font-size: x-small;
+}
+.user_info img {
+	background-color: black;
+	padding: 5px;
+	border-radius:20px;
+	border: solid;
+	height:50px;
+	 width:50px;
+	
+}
+
+
+.context{
+	margin-left: 50px;
+	text-align: left;
+	width: 60%;
+	min-height: 100px;
+}
+
+
+.context h3{
+	max-height: 80px;
+	overflow: hidden;
+}
+.context img{
+	
+	margin: 0px auto;
+	font-size: 10px;
+	max-width: 200px;
+}
+
+.pagination{
+	padding-top: 40px;
+	margin: 0px auto;
+	text-align: center;
+	height: 50px;
+	width: auto;
+}
+
+.pagination a{
+	margin: 5px;
+	text-decoration: none;
+	padding: 10px;
+	border:2px solid gainsboro;
+	background-color: lightgreen;
+	color: black;
+	border-radius: 10px;
+}
+
+.current{
+	padding: 10px;
+	font-size: 20px;
+}
+
+
+.page_list a:hover{
+	padding: 10px;
+	color: aliceblue;
+	background-color: deepskyblue;
+	border-right: outset;
+}
+
+
+.room_post form{
+	height: 400px;
+	
+}

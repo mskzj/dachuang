@@ -1,0 +1,227 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block title %}<title>{{ question.question_text }}</title>{% endblock %}
+    {% block extracss %} 
+	<link href="{% static 'css/question_detail.css' %}" type="text/css" rel="stylesheet" /> 
+	{% endblock %}
+
+    {% block content %}
+    {% autoescape off %}
+    <div class="qus_text" id="root_comment">
+    <p>问题:</p>
+    {{ question.question_text }}
+    <img  style="max-width: 400px; " src="/media/{{ question.question_img }}" alt="" >
+    
+     <a  href="javascript:scrollToEnd()" id="answer_button" style="float: right;">
+        	<i class="iconfont icon_cart" >
+        		回答问题
+			</i>
+       </a>
+    </div>
+    
+    <ul id="comment_block">
+    {% for comment in comments %}
+    <li class="comment" id="{{ comment.pk }}">
+        {% for comment_user_info in comment.comment_user.userinfo.all %}
+       
+       <div class="user_info">
+       	
+       	<img src="{{ comment_user_info.headimg.url }}" height="100px" width="100px" >
+       	<h3 style="font: 30px;">{{ comment_user_info.nickname }}</h3>
+       	
+       	<p>{{ comment.comment_time }}</p>
+       </div>
+       
+        {% endfor %}
+       
+       <div class="text">
+        {{ comment.comment_text }}
+        {% if comment.comment_img %}
+        <img src="/media/{{ comment.comment_img }}" alt="">
+        {% endif %}
+        <div class="site_bar">
+        <a  href="javascript:reply({{ comment.pk }})">
+        	<i class="iconfont icon_comment">
+			</i>
+        </a>
+        {% if comment.comment_type == 1 and is_user %}
+        
+        <a href="javascript:admire({{ comment.pk }})" id="admire{{ comment.pk }}">
+        	<i class="iconfont icon_smile">
+        		采纳
+        	</i>
+        </a>
+        <a href="javascript:delete({{ comment.id }})" id="del{{ comment.pk }}" style="display:none">删除</a>
+        {% endif %}
+        </div>
+       </div>
+       
+       
+
+    	<ul class="reply_all" id="fld{{ comment.pk }}">
+    {% for reply in comment.root.all %}
+    
+    <li class="reply" id="{{ reply.pk }}">
+    	
+    	<div class="reply1">
+    		<p>{{ reply.comment_user }}回复：{{ reply.reply_user }}</p>
+    	</div>
+    	
+        <i>{{ reply.comment_text }}</i> 
+        <div class="reply2">
+        <a href="javascript:reply({{ reply.pk }})">回复</a><br />
+        {{ reply.comment_time }}
+        </div>
+    </li> 
+     {% endfor %}
+    </ul>
+      <a style="text-align: center;" href="javascript:show(fld{{ comment.pk }})">点击显示全部评论</a>
+     
+    
+    <div class="clear"></div> 
+    </li>
+    {% endfor %}
+    
+    </ul>
+    
+    <form action="{% url 'comment' %}" method="post" id="comment_form" enctype="multipart/form-data" name="comment_form">
+        {{ comment_form }}
+        <input type="file" name="comment_img" id="id_comment_img">
+        <input type="hidden" value="0" name="comment_id" id="id_comment_id">
+        <input type="hidden" value="{{ question.pk }}" name="question_id">
+        <input type="hidden" value="0" name="comment_type" id="id_comment_type" >
+        <input type="submit" value="评论">
+        <button onclick="answer()" type="button" id="answer_button">回答问题</button>
+    </form>
+    {% endautoescape %}
+    {% endblock %}
+
+
+<script>
+    {% block javascript %}
+    window.onload=function(){
+        {% for comment in all_comments %}
+            check_del_user({{ comment.pk }});
+        {% endfor %}
+    }
+    function check_del_user(id){
+        $.get("{% url 'delete' %}",{'able_to_del':'1','id':id},function(data){
+        if(data['able_to_del']=='1'){
+            $('#del'+id).css('display','block');
+        }
+});
+    }
+    {% for admire_record in admire_records %}
+        $('#admire'+{{ admire_record.admire_comment.pk }}).text('已采纳');
+    {% endfor %}
+    <!--window.onerror=function(){return true;}-->
+    function reply(id)
+    {
+        $("#id_comment_id").val(id);
+        $('html').animate({scrollTop:$('#comment_form').offset().top},300,function(){
+        CKEDITOR.instances['id_comment_text'].focus();
+        });
+        var comment_id=$('#id_comment_id');
+        if (comment_id != '0'){
+            $("#answer_button").attr("disabled","true");
+        };
+    }
+    $('#comment_form').submit(function(){
+        CKEDITOR.instances['id_comment_text'].updateElement();
+        var form_obj=document.getElementById('comment_form');
+        var formdata=new FormData(form_obj);
+        $.ajax({
+            url:'{% url 'comment' %}',
+            type:'POST',
+            data: formdata,
+            cache:false,
+            dataType:'json',
+            contentType: false,
+            processData: false,
+            success:function(data){
+                var html='<li class="reply" id="'+data['comment_id']+'"><div class="reply1"><p>你的回复:</p></div>'+
+       '<i>'+data['comment_text']+'</i>'+'<div class="reply2">'+data['comment_date']+'<a href="javascript:reply('+data['comment_id']+')">回复</a></div></li>';
+                var id=$('#id_comment_id').val();
+                $('#'+id).append(html);
+                $('html').animate({scrollTop:$('#'+data['comment_id']).offset().top},300);
+                console.log(data);
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+        return false;
+    })
+    function answer(){
+        $('#id_comment_type').val('1');
+        CKEDITOR.instances['id_comment_text'].updateElement();
+        var form_obj=document.getElementById('comment_form');
+        var formdata=new FormData(form_obj);
+        $.ajax({
+            url:'{% url 'comment' %}',
+            type:'POST',
+            data: formdata,
+            cache:false,
+            dataType:'json',
+            contentType: false,
+            processData: false,
+            success:function(data){
+                var html='<li class="comment" id="'+data['comment_id']+'"><div class="user_info"><img src="{{ your_headimg }}" height="100px" width="100px" ><h3>'+data['nickname']+'</h3><p>'+data['comment_date']+'</p></div><div class="text">'+ data['comment_text']+'<a  href="javascript:reply('+data['comment_id']+')"><i class="iconfont icon_comment site_bar"></i></a></div></li>';
+                $('#comment_block').prepend(html);
+                $('html').animate({scrollTop:$('#'+data['comment_id']).offset().top},300);
+                console.log(data);
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+        return false;
+    }
+    function admire(id){
+        var admire_data={'admire':'yes','comment_id':id,'question':{{ question.pk }}};
+        var admire_id='#'+'admire'+id;
+        if($(admire_id).text()=="已采纳"){
+            alert('您已采纳该回答');
+            return false;
+        }
+        $.ajax({
+           url:'{% url 'comment' %}',
+           type:'POST',
+           data:admire_data,
+           cache:false,
+           success:function(data){
+                $(admire_id).text('已采纳');
+                console.log(data);
+           },
+           error:function(xhr){
+           	    alert('采纳失败了');
+                console.log(xhr);
+           }
+        });
+        return false;
+    }
+    function show(id){
+    	var x=id;
+    	if(x.className== 'reply_all'){
+    		x.className= 'reply_all_1';
+    	}
+    	else{
+    		x.className='reply_all';
+    	}
+    	
+    }
+    
+    
+
+    function scrollToEnd(){
+		            var h = $(document).height()-$(window).height();
+		            $(document).scrollTop(h); 
+    }
+
+ 
+
+        
+    {% endblock %}
+</script>

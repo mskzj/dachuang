@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+        {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/show_user_info2.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/iconfont.css' %}" />
+</head>
+<body>
+   {% if not error_msg %}
+   
+      <a href="/main" style="float: right;background-color: deeppink;padding: 5px;color: wheat;text-decoration: none;font-size: 15px;">回到首页</a>
+
+     <div class="userinfo">
+        <h2 style="margin: 0px auto;text-align: center;width: 400px;">个人信息</h2>
+        <div class="touxiang">
+            <img src="{{ userinfo.headimg.url }}">
+                <h3>{{ userinfo.nickname }}</h3>
+        </div>
+        <button onclick="window.open('{% url 'edituserinfo' %}')"><span>编辑个人资料</span></button>
+        <div class="your_number">
+            <li>
+            <i class="iconfont icon_good">
+            {{ userinfo.like_num }}</i>
+            </li>
+            <li class="iconfont icon_coin">
+            {{ integral }}
+            </li>
+        </div>
+        <div>
+        {% autoescape off %}
+            <li style="color: gray;list-style: none;padding: 20px;">{{ userinfo.aboutme }}</li>
+            <div class="more_info">
+            <ul>
+                <li>电话：{{ userinfo.tel }}</li>
+                <li>QQ  ：{{ userinfo.QQ }}</li>
+                <li>专业 ：{{ userinfo.major }}</li>
+                <li>年级：{{ userinfo.grade }}</li>
+            </ul>
+            </div>
+        {% endautoescape %}
+        </div>
+
+        <nav id="nav-menu">
+            <a href="#" data-rel="history_records" class="active">历史记录</a>
+            <a href="#" data-rel="question-section">发布的问题</a>
+            <a href="#" data-rel="comment-section">我的评论</a>
+            <a href="#" data-rel="answer-section">我的回答</a>
+            <div class="indicator"></div>
+        </nav>
+
+        {% autoescape off %}
+        <section class="history_records  active-section">
+        <h2 class="records_head">历史记录</h2>
+        <ul>
+        {% for record in history_records %}
+        <li class="records_details">
+           <a href="{% url 'comment' %}?question_id={{ record.viewed_question.pk }}">
+            {{ record.viewed_question.question_text }}
+            <span class="time">{{ record.view_time }}</span>
+           </a>
+
+        </li>
+        {% endfor %}
+        </ul>
+        </section>
+
+         <section class="question-section">
+        <h2 class="records_head">问题</h2>
+             <ul>
+            {% for question in my_question %}
+                <li class="records_details">
+                <a href="{% url 'comment' %}?question_id={{ question.id }}">
+                {{ question.question_text }}
+                <span class="time">{{ question.question_date }}</span>
+                </a>
+
+                </li>
+            {% endfor %}
+            </ul>
+        </section>
+
+         <section class="comment-section">
+        <h2 class="records_head">评论</h2>
+             <ul>
+            {% for comment in my_comment %}
+                <li class="records_details">
+                {% if comment.comment_question %}
+                <a href="{% url 'comment' %}?question_id={{ comment.comment_question.id }}">
+                {% else %}
+                {% endif %}
+                {{ comment.comment_text }}
+                <span class="time">{{ comment.comment_time }}</span>
+                </a>
+
+                </li>
+            {% endfor %}
+            </ul>
+        </section>
+         <section class="answer-section">
+        <h2 class="records_head">回答</h2>
+              {% for answer in my_answer %}
+                <li class="records_details">
+                <a href="{% url 'comment' %}?question_id={{ answer.comment_question.id }}">
+                {{ answer.comment_text }}
+                <span class="time">{{ answer.comment_time }}</span>
+                </a>
+
+                </li>
+            {% endfor %}
+        </section>
+        {% endautoescape %}
+
+</div>
+
+
+ 
+		  <div class="return_top">
+		    <a href="javascript:scrollTo(0,0);" style="background-image: url({% static 'images/top.jpg' %});;"></a>
+		   </div>
+ 
+   {% endif %}
+   {% if error_msg %}
+	    <div class="error_msg">
+	         <p>{{ error_msg }}</p>
+	         <button onclick="window.open('{% url 'edituserinfo' %}')"><span>编辑个人资料</span></button>
+	     </div>
+	{% endif %}
+</body>
+
+<script>
+const navMenuItems = document.querySelectorAll('#nav-menu a');
+const indicator = document.querySelector('.indicator');
+
+// 设置指示器的点击切换
+function handleMenuItemClick(target){
+    navMenuItems.forEach(item=>{
+        item.classList.remove('active');
+        item.style='';
+    });
+    target.classList.add('active');
+    indicator.style.width =`${target.offsetWidth}px`;
+    indicator.style.left = `${target.offsetLeft}px`;
+
+    //设置要展示的内容
+    const cueerntSection = document.querySelector('.active-section');
+    cueerntSection.classList.remove('active-section');
+    const newCurrentSection = document.querySelector(`.${target.getAttribute('data-rel')}`);
+    newCurrentSection.classList.add('active-section');
+}
+
+navMenuItems.forEach(item=>{
+    item.addEventListener('click',e=>handleMenuItemClick(e.target));
+    item.classList.contains('active') && handleMenuItemClick(item);
+});
+</script>
+</html>

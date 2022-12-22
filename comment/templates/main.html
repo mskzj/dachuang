@@ -1,0 +1,254 @@
+
+{% extends 'base2.html' %}
+{% load static %}
+{% block title%}<title>主页(❤ ω ❤)</title>{% endblock %}
+{% block extracss %} 
+<link href="{% static 'css/main.css' %}" type="text/css" rel="stylesheet" /> 
+
+{% endblock %}
+
+
+{% block content %}
+	{% if not is_aquired %}
+   <div id="dialog" title="亲爱的{{ welcome_name }}">恭喜你获得100积分，可以用来悬赏哦</div>
+    {% endif %}
+    <div class="user">
+    <h3 style="float: left;">HELLO {{ welcome_name }} , 请问今天要来点题吗？</h3>
+    </div>
+     <div class="clear"></div>
+     
+
+   <div class="site" id="web">
+		
+			<ul class="web_list">
+				<li class="web_p">
+					<a href="/account/showuserinfo">
+					<i class="iconfont icon_man">
+					
+					</i>
+				    <span class="text">个人中心</span>
+					</a>
+				</li>
+				<li class="web_p">
+					<a href="/account/msg"> 
+					<i class="iconfont icon_comment" style="position: relative; ">
+						 <div class="msg_num" id="msg_num">
+						   {{ msg_num }}
+						 </div> 
+					</i>
+				    <span class="text">消息中心</span>
+					</a>
+				</li>
+			    <li class="web_p">
+					<a href="{% url 'chat' %}">
+					<i class="iconfont icon_cart" style="position: relative; ">
+					</i>
+				    <span class="text">一起来聊天</span>
+					</a>
+				</li>
+			</ul>
+			
+		   </div>
+    
+     
+     <div class="slice">
+    <div id="section1" class="container-fluid bar">
+	<h1><a href="{% url 'post_question' 'jisuanji' %}">计算机</a></h1> 
+	<ul>
+		{% autoescape off %}
+	{% for question in jisuanji %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</ul>
+	</div>
+	
+	<div id="section2" class="container-fluid bar">
+		
+		<h1><a href="{% url 'post_question' 'jingjiguanli' %}">经济管理</a></h1>
+    {% autoescape off %}
+	{% for question in jingjiguanli %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</div>
+	
+	<div id="section3" class="container-fluid bar">
+		
+		<h1><a href="{% url 'post_question' 'xinli' %}">心理学</a></h1>
+	{% autoescape off %}
+	{% for question in xinli %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</div>
+	<div id="section41" class="container-fluid bar">
+		
+		<h1><a href="{% url 'post_question' 'waiyu' %}">外语</a></h1>
+		{% autoescape off %}
+	{% for question in waiyu %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</div>
+	<div id="section42" class="container-fluid bar">
+	
+		<h1><a href="{% url 'post_question' 'history' %}">文学历史</a></h1>
+		{% autoescape off %}
+	{% for question in history %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+</div>
+    <div id="section5" class="container-fluid bar">
+	
+		<h1><a href="{% url 'post_question' 'gongxue' %}">工学</a></h1>
+		{% autoescape off %}
+	{% for question in gongxue %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</div>
+	
+	<div id="section6" class="container-fluid bar">
+		<h1><a href="{% url 'post_question' 'lixue' %}">理学</a></h1>
+		{% autoescape off %}
+	{% for question in lixue %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+		
+		
+	</div>
+	
+	<div id="section7" class="container-fluid bar">
+		<h1><a href="{% url 'post_question' 'shengming' %}">生命科学</a></h1>
+		{% autoescape off %}
+	{% for question in shengming %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+		
+	</div>
+	<div id="section8" class="container-fluid bar">
+		<h1><a href="{% url 'post_question' 'zhexue' %}">哲学</a></h1>
+		{% autoescape off %}
+	{% for question in zhexue %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+		
+	</div>
+	<div id="section9" class="container-fluid bar">
+		<h1><a href="{% url 'post_question' 'faxue' %}">法学</a></h1>
+		{% autoescape off %}
+	{% for question in faxue %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+		
+	</div>
+	<div id="section10" class="container-fluid bar">
+		
+		<h1><a href="{% url 'post_question' 'edu' %}">教育教学</a></h1>
+		{% autoescape off %}
+	{% for question in edu %}
+	{% for userinfo in question.user.userinfo.all %}
+	<li>
+		
+	<a href="{% url 'comment' %}?question_id={{ question.pk }}">【{{ question.question_date }}{{ userinfo.nickname }}】{{ question.question_text }}</a>
+	</li>
+	{% endfor %}
+	{% endfor %}
+	{% endautoescape %}
+	</div>
+    
+</div>    
+
+
+    
+{% endblock %}
+<script>
+{% block javascript %}
+<!--	{% if not is_aquired %}-->
+<!--		$('#dialog').dialog({-->
+<!--			dialogClass: "no-close",-->
+<!--			buttons:[-->
+<!--				{-->
+<!--					text:'太好了',-->
+<!--					click:function(){-->
+<!--						$.post({% url 'main' %},{'get_integral':'TRUE'});-->
+<!--						$(this).dialog('close');-->
+<!--					}-->
+<!--				}-->
+<!--			]-->
+<!--		});-->
+<!--	{% endif %}-->
+	
+	
+	$(document).ready(
+	function(){
+	
+	if ({{ msg_num }}>0)
+	{
+		$('#msg_num').css("display","block");
+	}
+	
+	}
+	);
+	
+	
+{% endblock %}
+
+</script>
+

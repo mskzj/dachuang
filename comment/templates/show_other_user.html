@@ -1,0 +1,115 @@
+
+{% extends 'base.html' %}
+{% load static %}
+    {% block title %}<title>{{ other_userinfo.nickname }}的个人主页</title>{% endblock %}
+    {% block extracss %}
+    <link href="{% static 'css/show_other_user.css' %}" rel="stylesheet" type="text/css" />
+    {% endblock %}
+    
+    {% block content %}
+    
+        
+         <div class="touxiang">
+         	<img src="/media/{{ other_userinfo.headimg }}"/>
+            	<h3>{{ other_userinfo.nickname }}</h3>
+                 
+         </div>
+         <ul class="info">
+         	{% autoescape off %}
+         	<br />
+        <li style="color: gray;list-style: none;padding: 20px;">{{ other_userinfo.aboutme }}</li><br/> <br />
+        <li>
+         	<i class="iconfont icon_good">
+            <p id="like_num">{{ like_num }} </p></i>
+           </li>
+           <li class="iconfont icon_coin">
+           	{{ integral }}
+           </li>
+           
+         <!--
+         	加入其他的东西
+         -->
+        {% endautoescape %}
+         </ul>
+         
+        <div class="dianzan">
+        
+        <button onclick="like()"  style="background-image: url({% static 'images/dz.jpg' %});"></button>
+       <br /> <p id="like_status" style="float: right;margin: 30px;">{{ like_status }}</p>
+         </div>
+         
+         
+         <div class="more_info">
+        
+           		<li>专业 ：{{ other_userinfo.major }}</li>
+           		<br />
+           		<li>年级：{{ other_userinfo.grade }}</li>
+       
+           
+          </div>
+          
+          
+         
+    {% endblock %}
+
+
+<script>
+    {% block javascript %}
+    function like()
+    {
+        if($('#like_status').text()=="点赞")
+        {
+        $.ajax({
+            url:'{% url 'show_other_user' %}',
+            type:'POST',
+            data: {'like_status':'like'},
+            cache:false,
+            success: function(data){
+                console.log(data);
+                if(data['status']=="已赞")
+                {
+                    var like_num=parseInt($('#like_num').text());
+                    like_num++;
+                    $('#like_num').text(like_num.toString());
+                    $('#like_status').text("已赞");
+                    $('#like_botton').text("取消点赞");
+              //      $('#like_photo').
+                }
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+        
+        
+        
+        
+        }
+        else
+        {
+            $.ajax({
+            url:'{% url 'show_other_user' %}',
+            type:'POST',
+            data: {'like_status':'dislike'},
+            cache:false,
+            success: function(data){
+                console.log(data);
+                if(data['status']=="点赞")
+                {
+                    var like_num=parseInt($('#like_num').text());
+                    like_num--;
+                    $('#like_num').text(like_num.toString());
+                    $('#like_status').text("点赞");
+                    $('#like_botton').text("点赞");
+                }
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+        }
+        return false;
+    };
+    {% endblock %}
+</script>
+

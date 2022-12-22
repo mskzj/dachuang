@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" type="text/css" href="{% static 'css/top.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/iconfont.css' %}" />
+    
+    {% block title%}<title>Title</title>{% endblock %}
+     <link rel="stylesheet" href="https://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+     <script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+     <script src="https://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+     {% block extracss %}{% endblock %}
+</head>
+<body>
+	<div class="HEAD">
+        <h1>开启愉快的学习之旅</h1>
+		<button onclick="window.location.href='/account/login'" style="color: slateblue;float: right;border: none;background-color: greenyellow;padding: 8px 25px;">登出</button>
+	</div>
+			
+	<div class="guid">
+	    <ul>
+	    <li class="dropdown">
+		<button class="dropbtn">   学科    </button>
+        <div class="dropdown-content">
+        	<a href="{% url 'post_question' 'jisuanji' %}">计算机</a>
+        	<a href="{% url 'post_question' 'jingjiguanli' %}">经济管理</a>
+        <a href="{% url 'post_question' 'xinli' %}">心理学</a>
+        <a href="{% url 'post_question' 'waiyu' %}">外语</a>
+        <a href="{% url 'post_question' 'history' %}">文学历史</a>
+        <a href="{% url 'post_question' 'gongxue' %}">工学</a>
+        <a href="{% url 'post_question' 'lixue' %}">理学</a>
+        <a href="{% url 'post_question' 'shengming' %}">生命科学</a>
+        <a href="{% url 'post_question' 'zhexue' %}">哲学</a>
+        <a href="{% url 'post_question' 'faxue' %}">法学</a>
+        <a href="{% url 'post_question' 'edu' %}">教育教学</a>
+        </div>
+        </li>
+        
+        
+        <li class="dropdown">
+		<button class="dropbtn">   传送门    </button>
+        <div class="dropdown-content">
+        <a href="{% url 'main' %}">首页</a>
+        <a href="/account/showuserinfo">你的一切</a>
+        </div>
+        </li>
+
+        <li class="dropdown">
+		<button class="dropbtn">   其他    </button>
+        <div class="dropdown-content">
+        <a href="{% url 'chat' %}">聊天吧</a>
+        </div>
+        </li>
+        
+      <!--   加入导航内容-->
+          <li class="top_bar">
+            <i class="iconfont icon_search" >
+            </i>
+            <form  style="float:right;line-height:middle;" role="search" method="get" id="searchform" action="{% url 'haystack_search' %}">
+            <input type="search" name="q" placeholder="搜索" required>
+            <!--  <button type="submit"><span class="ion-ios-search-strong"></span></button>-->
+            </form>
+          </li>
+        </ul>
+	    
+      
+	</div>
+        
+        <div class="clear"></div>
+        {% block content %}
+        {% endblock %}
+
+    
+    <div class="return_top">
+    	<a href="/account/showuserinfo">
+    	<img src="{{ your_headimg }}" class="headimg" alt="向上" id="head_img"/>
+    	</a>
+    	<a href="javascript:scrollTo(0,0);" >
+    	<i class="iconfont icon_up">
+       </i>
+    	</a>
+    </div>
+</body>
+<script>
+    {% block javascript %} 
+    {% endblock %}
+	$(document).ready(function(){
+	$('#txt').keydown(function(ev){
+    
+    if(ev.keyCode==13&&$('#txt').val()!=''){   
+        window.open('https://www.baidu.com/s?wd='+$('#txt').val())
+        $('#txt').val('');
+    }
+   })
+	
+
+	
+	
+});
+    {% if not your_headimg %}
+        $("#head_img").attr('src','{% static 'images/origin.jpg' %}');
+    {% endif %}
+    
+   
+</script>
+</html>

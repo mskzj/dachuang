@@ -1,0 +1,114 @@
+body{
+	text-align: center;
+	padding-top: 50px;
+	margin: 0px auto;
+	height: 700px;
+}
+
+
+.box img{
+	float: right;
+	max-width: 350px;
+	max-height: 250px;
+}
+
+ .box {
+            width: 80%;
+            height: 255px;
+            margin: 0px auto;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .box ul li {
+        	list-style: none;
+            float: left;
+        }
+ 
+        .box ul {
+            width: 2000px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }  
+.HEAD{
+	
+	text-align: center;
+	margin: 0px auto;
+	height: 100px;
+	background-color: royalblue;
+	
+}
+
+.HEAD h1{
+	
+	padding-top: 20px;
+	margin: 0px;
+}
+
+.FORM{
+	
+	height: 400px;
+	margin: 0px auto;
+	background-color: aliceblue;
+}
+
+.FORM input{
+	background-color: deepskyblue; 
+    border: none;
+    color: white;
+    padding: 15px 42px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+     -webkit-transition-duration: 0.4s; /* Safari */
+     transition-duration: 0.4s;
+}
+
+.FORM input:hover{
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.FORM a{
+	float: inherit;
+	font-size: smaller;
+	text-decoration : none;
+	
+}
+
+.guid_rgs{
+	clear: all;
+	text-align: center;
+	padding-top: 60px;
+
+	width: 150px;
+    float: right;
+
+}
+
+.gui_rgs a:hover{
+	padding: 60px;
+	background-color: deepskyblue;
+}
+
+@media only screen and (min-width: 1000px) {
+	
+	
+	.HEAD{
+		width: 800px;
+    }
+	
+	.FORM{
+		width: 800px;
+}
+    
+
+	
+	
+	
+	
+	
+}

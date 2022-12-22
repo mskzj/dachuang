@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block title %}<title>嗖嗖嗖~</title>{% endblock %}
+	{% block extracss %}
+	<link href="{% static 'css/search.css' %}" type="text/css" rel="stylesheet" />
+	{% endblock %}
+
+{% load highlight %}
+
+{% block content %}
+<h1>搜索结果</h1>
+    {% if query %}
+    <ul>
+        {% for result in page.object_list %}
+        <li class="list_show" >
+            <div class="pic">
+                <img src="/media/{{ result.question_img }}" alt="" >
+            </div>
+            {% autoescape off %}
+            <div class="context"  >
+                 <h3>{% highlight result.object.question_text with query max_length 100 %}</h3>
+                <a href="{% url 'comment' %}?question_id={{ result.object.id }}">查看详情...</a>
+		        {% endautoescape %}
+            </div>
+            <h4 style="	font-size: 12px;	float: right;">
+                  提问用户：{{ result.author }}
+                  <br>{{ result.question_date }}
+            </h4>
+        </li>
+        {% empty %}
+            <div class="no-post">没有搜索到你想要的结果！</div>
+        {% endfor %}
+        {% if page.has_previous or page.has_next %}
+           <div>
+            {% if page.has_previous %}<a href="?q={{ query }}&page={{ page.previous_page_number }}">{% endif %}« 上一页{% if page.has_previous %}</a>{% endif %}
+        |
+            {% if page.has_next %}<a href="?q={{ query }}&page={{ page.next_page_number }}">{% endif %}下一页 »{% if page.has_next %}</a>{% endif %}
+           </div>
+        {% endif %}
+    {% else %}
+<!--        请输入搜索关键词，例如 django-->
+    {% endif %}
+
+{% endblock %}

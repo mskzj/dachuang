@@ -1,0 +1,60 @@
+
+.touxiang{
+	text-align: center;
+	margin: 0px auto;
+
+}
+.touxiang img{
+	border: solid;
+	border-radius:100px;
+	height:200px;
+	width:200px;
+}
+.touxiang h3{
+	margin: 0px;
+ 
+}
+
+
+
+.info li,.info p,.info i{
+	padding: 5px;
+	display: inline;
+	list-style: none;
+}
+
+
+.dianzan{
+	position: absolute;
+	top: 30%;
+	right: 10%;
+	width:100px;
+	height:100px;
+	text-align: center;
+	margin: 0px auto;
+}
+
+
+.dianzan button{
+	margin: 10px;
+	height: 50px;
+	width: 50px;
+	background-color: gray;
+	border-radius: 5px;
+	background-size:100% 100%;  
+}
+
+.more_info{
+	padding-right: 10px;
+	text-align: center;
+	margin: 0px auto;
+	height: auto;
+	background-color: deepskyblue;
+	box-shadow: 5px 5px gray;
+}
+
+.more_info li{
+	text-align:left;
+	margin-left: 300px;
+	padding: 5px;
+}

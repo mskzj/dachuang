@@ -1,0 +1,113 @@
+
+.clear{
+	clear: both;
+	overflow: hidden;
+}
+.qus_text{
+   	text-align: left;
+   	height: auto;
+    width: 100%;
+    display: inline-block;
+}
+.qus_text img{
+	max-width: 200px;
+}
+
+.comment{
+	position: relative;
+	text-align: center;
+	margin: 0px auto;
+	border: solid 2px;
+	min-height: 200px;
+}
+
+.comment p{
+	margin: 0px;
+	padding: 0px;
+}
+
+.user_info {
+	width:  20%;
+	margin-right: 30px;
+	background-color: gainsboro;
+	float: left;
+	position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.text{
+	text-align: left;
+    width: 70%;
+    padding: 10px;
+    float: right;
+	min-height: 200px;
+}
+.text img{
+	max-width: 400px;
+}
+.text p{
+	margin-left: 0px;
+	width: 80%;
+	float: left;
+	word-wrap:break-word;
+    word-break:normal; 
+}
+
+.reply_all{
+	text-align: center;
+	margin: 0px auto;
+	width: 500px;
+	height: 240px;
+	overflow: hidden;
+}
+.reply_all_1{
+	margin-left: 50px;
+	text-align: center;
+	margin: 0px auto;
+	width: 500px;
+}
+
+.reply{
+	border: solid 1px gainsboro;
+	width: 500px;
+	min-height: 60px;
+	background-color: whitesmoke;
+	text-align: left;
+	display: inline-block;
+}
+
+
+.reply a{
+}
+
+.reply i{
+    padding-left: 5px;
+	float: right;
+	width:60% ;
+	display: inline-block;
+}
+.reply1{
+	font: xx-small;
+	float: left;
+	width: 200px;
+	min-height: 20px;
+	background-color: white;
+}
+.reply2{
+	text-align: right;
+	font-size: 15px;
+	padding: 0px;
+	margin: 0px;
+	float: right;
+	width:250px;
+}
+
+.site_bar{
+	float: right;
+	height: auto;
+    width: 60px;
+}
+
+

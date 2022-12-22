@@ -1,0 +1,72 @@
+
+
+
+body {
+    display: flex;
+    align-items: center; /*定义body的元素垂直居中*/
+    justify-content: center; /*定义body的里的元素水平居中*/
+}
+.titles{
+    width: 150px;
+	height: 50px;
+
+}
+
+
+.users{
+    float: left;
+	width: 150px;
+	height: 460px;
+	border: 4px outset cadetblue;
+	text-align: center;
+	margin: 5px;
+	border-radius: 10px;
+	padding: 5px;
+	display: inline-block;
+	overflow: auto;
+}
+
+.users:hover{
+	background-color: gainsboro;
+}
+.chat {
+     float:left;
+     position:relative;
+     width:680px;
+     height: 480px;
+}
+
+#chat-log{
+     resize:none;
+     float:left;
+     position: absolute;
+     margin: 5px;
+     border-radius: 10px;
+     padding: 5px;
+     border: 4px outset cadetblue;
+     width: 650px;
+     height: 400px;
+}
+#chat-message-input {
+     width: 600px;
+     position: absolute;
+     margin: 5px;
+     border-radius: 10px;
+     padding: 5px;
+     border: 4px outset deepskyblue;
+     height: 30px;
+     left;0;bottom:0;
+}
+#chat-message-submit {
+
+
+     width: 60px;
+     position: absolute;
+     margin: 5px;
+     border-radius: 10px;
+     padding: 5px;
+     border: 4px outset deepskyblue;
+     height: 50px;
+     right:0;
+     bottom:0;
+}

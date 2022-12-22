@@ -1,0 +1,139 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="utf-8"/>
+    <title>{{ room.room_name }}</title>
+    <link href="{% static 'css/room.css' %}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+{% block content %}
+   <div class="titles">
+    <h4>聊天室名称：{{ room.room_name }}</h4>
+    在线人数：</br>
+    <h4 name="num" style="float: left;position: const;">{{ room.person_num }}</h4>
+   </div>
+    <div class="chat_all">
+        <!--聊天室在线用户信息-->
+        <div class="users" name="user_all">
+        <!-- 新增-->
+
+
+        <!-- 原有-->
+            {% for person in all_persons %}
+            {% for userinfo in person.room_user.userinfo.all %}
+            <div class="user_info2" id="{{ userinfo.nickname }}">
+                <a href="{% url 'show_other_user' %}?other_user_name={{ userinfo.nickname }}">
+                    <img src="{{ userinfo.headimg.url }}" height="50px" width="50px" ></a>
+                <p>{{ userinfo.nickname }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="chat">
+        <textarea id="chat-log" class="chat_log"></textarea><br>
+        <input id="chat-message-input" type="text" ><br>
+        <input id="chat-message-submit" type="button" value="Send">
+        </div>
+    </div>
+    {{ room_name|json_script:"room-name" }}
+
+{% endblock %}
+    <script>
+    {% block javascript %}
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data.message ;
+            const id = message._id; //消息类型
+            if(id == 1){  // 发送加入房间消息
+               document.querySelector('#chat-log').value += ( message.textContent + '\n');
+
+               //界面添加用户信息
+               var is_exist = document.getElementById(message.nickname);
+               if( is_exist == null ){  //判断是否存在
+                   //添加节点
+                   const template=
+                            "<div class='user_info2' id='" + message.nickname + "'>" +
+                                "<a href='" + "{% url 'show_other_user' %}?other_user_name=" + message.nickname +"'>" +
+                                "<img src='"+ message.headimg + "' height='50px' width='50px' ></a> " +
+                                "<p>" + message.nickname + "</p>"+
+                            "</div>";
+                   let tempNode = document.createElement('div');
+                   tempNode.innerHTML = template;
+                   const container = document.getElementsByName('user_all')[0];
+                   container.appendChild(tempNode.firstChild);
+
+                   //人数+1
+                   const num = document.getElementsByName('num');
+                   if(num[0].innerText =="" )num[0].innerText=0;
+                   num[0].innerText= parseInt(num[0].innerText)+1
+
+               }
+
+            }
+            else if (id == 0){// 退出聊天室
+               document.querySelector('#chat-log').value += ( message.textContent + '\n');
+
+               //退出删除用户信息
+               let tempNode = document.getElementById(message.nickname);
+               tempNode.parentNode.removeChild(tempNode);
+               //人数-1
+               const num = document.getElementsByName('num');
+               num[0].innerText= parseInt(num[0].innerText)-1
+            }
+            else{
+                document.querySelector('#chat-log').value += ( message.nickname+message.sendTime + '\n' +message.textContent + '\n');
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const textContent = messageInputDom.value;
+            var d = new Date();
+            const message = {
+                "_id": '2',
+                "nickname": "{{ nickname }}" ,
+                "headimg": "{{ your_headimg }}" ,
+                "textContent": textContent,
+                "sendTime": d
+            };
+<!--            console.log(message)-->
+            if (textContent != ''){
+
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            }
+
+        };
+
+    {% endblock %}
+    </script>
+
+</body>
+</html>

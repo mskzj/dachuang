@@ -1,0 +1,112 @@
+<!-- chat/templates/chat/chat.html -->
+{% extends 'base.html' %}
+{% load static %}
+    {% block title%}<title >聊天咯~</title>{% endblock %}
+    {% block extracss %}
+
+	<link href="{% static 'css/chat.css' %}" type="text/css" rel="stylesheet" />
+    {% endblock %}
+
+{% block content %}
+<!--展示现有聊天室-->
+    	<ul>
+    {% for room in room_of_page %}
+    <li class="list_show" >
+
+        <div class="user_info">
+        {% for userinfo in room.user.userinfo.all %}
+        <a href="{% url 'show_other_user' %}?other_user_name={{ userinfo.nickname }}">
+        	<img src="{{ userinfo.headimg.url }}" height="50px" width="50px" ></a>
+        <p>{{ userinfo.nickname }}</p>
+
+        {% endfor %}
+        </div>
+
+        {% autoescape off %}
+
+        <div class="context" onclick="window.open('{% url 'chat' %}{{ room.room_name }}{{ userinfo.nickname }}')">
+                 <h3>聊天室名称：{{ room.room_name }}</h3>
+                 <h4>聊天室描述：{{ room.room_type }}</h4>
+                 <h5>在线人数：{{ room.person_num }}</h5>
+		       {% endautoescape %}
+		</div>
+
+                  <br>{{ room.time }}</h4>
+    </li>
+     {% endfor %}
+   </ul>
+
+<!--    分页-->
+    <div class="pagination">
+
+        <span class="step-links">
+           {% if room_of_page.has_previous %}
+            <a href="?page=1">&laquo; 首页</a>
+            <a href="?page={{ room_of_page.previous_page_number }}">上一页</a>
+            {% endif %}
+        <span class="current">
+            第 {{ room_of_page.number }} 页
+                     共 {{ room_of_page.paginator.num_pages }} 页
+        </span>
+
+        <span class="page_list">
+            {% if not first_shown_page_num == 1 %}
+            <a href="?page=1">1</a>
+            <a>......<a>
+            {% endif %}
+            {% for page in page_range %}
+            <a href="?page={{ page }}">{{ page }}</a>
+            {% endfor %}
+            {% if not last_shown_page_num == room_of_page.paginator.num_pages %}
+            <a>......<a>
+            <a href="?page={{ room_of_page.paginator.num_pages }}">{{ room_of_page.paginator.num_pages }}</a>
+            {% endif %}
+        </span>
+
+
+        {% if room_of_page.has_next %}
+            <a href="?page={{ room_of_page.next_page_number }}">下一页</a>
+            <a href="?page={{ room_of_page.paginator.num_pages }}">尾页 &raquo;</a>
+        {% endif %}
+        </span>
+
+
+
+    </div>
+<!--创建房间-->
+    <div class="room_post">
+      <form action="{% url 'chat'  %}"  method="post" >
+        {% csrf_token %}
+        {% for field in room_form %}
+           <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+         <p>{{ field }}</p>
+         <p>{{ field.errors.as_text }}</p>
+        {% endfor %}
+         <p>{{ room_form.non_field_errors.as_text }}</p>
+        <input type="submit" value="创建聊天室">
+      </form>
+   </div>
+
+
+<!--    What chat room would you like to enter?<br>-->
+<!--    <input id="room-name-input" type="text" size="100"><br>-->
+<!--    <input id="room-name-submit" type="button" value="Enter">-->
+
+{% endblock %}
+
+    <script>
+    {% block javascript %}
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+
+    {% endblock %}
+    </script>
